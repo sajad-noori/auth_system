@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="/signin.css">
+    <!-- Include Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sign In</h1>
+        <!-- signin.ejs -->
+<% if (typeof error !== 'undefined') { %>
+    <p style="color: red;"><%= error %></p>
+<% } %>
+        <form id="signInForm" action="/signin" method="post">
+            <div class="mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" name="firstName" required>
+            </div>
+            <div class="mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" name="lastName" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" name="password" required>
+                    <span class="input-group-text toggle-password" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                    <span class="input-group-text toggle-password" id="toggleConfirmPassword">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                <div id="passwordError" class="error-message" style="color: red; display: none;">Passwords do not match.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Sign In</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('signInForm');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const passwordError = document.getElementById('passwordError');
+            const togglePassword = document.getElementById('togglePassword');
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+
+            // Function to toggle password visibility
+            function togglePasswordVisibility(inputField, toggleElement) {
+                const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
+                inputField.setAttribute('type', type);
+                toggleElement.querySelector('i').classList.toggle('fa-eye-slash');
+            }
+
+            // Add event listener for form submission
+            form.addEventListener('submit', function(event) {
+                // Prevent form submission
+                event.preventDefault();
+
+                // Check if passwords match
+                if (password.value !== confirmPassword.value) {
+                    passwordError.style.display = 'block'; // Show error message
+                    return;
+                }
+
+                // If passwords match, submit the form
+                form.submit();
+            });
+
+            // Add event listener for toggle password button
+            togglePassword.addEventListener('click', function() {
+                togglePasswordVisibility(password, togglePassword);
+            });
+
+            // Add event listener for toggle confirm password button
+            toggleConfirmPassword.addEventListener('click', function() {
+                togglePasswordVisibility(confirmPassword, toggleConfirmPassword);
+            });
+        });
+    </script>
+</body>
+</html>
